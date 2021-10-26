@@ -9,6 +9,7 @@
         <arg name="world_name"  value="$(find task_1)/worlds/task1_2.world"/>
     </include>
     <node name="moving_marker" type="moving_marker.py" pkg="task_1" />
+    <node name="marker_detection" type="marker_detection.py" pkg="task_1" />
     
 	<group if="$(arg record)">
 		<node name="throttled_model_states" type="throttle" pkg="topic_tools" args="messages /gazebo/model_states 10"/>

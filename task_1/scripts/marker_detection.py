@@ -19,6 +19,7 @@ from cv_bridge import CvBridge, CvBridgeError
 import cv2
 import numpy as np
 import rospy
+import math
 
 
 class image_proc():
@@ -41,21 +42,59 @@ class image_proc():
         
 		self.img = np.empty([]) # This will contain your image frame from camera
 		self.bridge = CvBridge()
-		
+		self.rate = rospy.Rate(10) #Publishing at a rate of 10Hz
 		self.marker_msg=Marker()  # This will contain the message structure of message type task_1/Marker
 
 
-	# Callback function of amera topic
+	# Callback function of camera topic
 	def image_callback(self, data):
 	# Note: Do not make this function lenghty, do all the processing outside this callback function
 		try:
 			self.img = self.bridge.imgmsg_to_cv2(data, "bgr8") # Converting the image to OpenCV standard image
+			self.get_pose()
 		except CvBridgeError as e:
 			print(e)
 			return
 			
 	def publish_data(self):
 		self.marker_pub.publish(self.marker_msg)
+		self.rate.sleep()
+	
+	def detect_aruco(self):
+		gray = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
+		aruco_dict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_5X5_250)
+		parameters = cv2.aruco.DetectorParameters_create()
+		corners, idx, _ = cv2.aruco.detectMarkers(gray, aruco_dict, parameters = parameters)
+		idx = idx[0][0]
+		corners = corners[0][0]
+		return idx, corners
+
+	def calculate_pose(self):
+		idx, corners = self.detect_aruco()
+		top_left = corners[0]
+		top_right = corners[1]
+		bottom_right = corners[2]
+		bottom_left = corners[3]
+		top_centre = (top_right+top_left)/2
+		center = (top_left+top_right+bottom_right+bottom_left)/4
+		height, width, _ = self.img.shape
+		ref = np.array([[0,height], [width,height]])
+		angle_ref = math.degrees(math.atan2((ref[1][1]-ref[0][1]),(ref[1][0]-ref[0][0])))
+		angle_prime = math.degrees(math.atan2((top_centre[1]-center[1]), top_centre[0]-center[0]))
+		angle = angle_ref - angle_prime
+		if angle<0:
+			angle = 360 - abs(angle)
+		elif angle == 360:
+			angle = 0
+		return center[0], center[1], angle
+	
+	def get_pose(self):
+		self.marker_msg.id, _ = self.detect_aruco()
+		self.marker_msg.x, self.marker_msg.y, self.marker_msg.yaw = self.calculate_pose()
+		self.marker_msg.z = 0
+		self.marker_msg.roll = 0
+		self.marker_msg.pitch = 0
+		self.publish_data()
 
 if __name__ == '__main__':
     image_proc_obj = image_proc()
