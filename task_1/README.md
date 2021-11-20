@@ -91,6 +91,7 @@ corners, ids, _ = aruco.detectMarkers(gray, aruco_dict, parameters = parameters)
 ![Image 2](../assets/task_1/Result_image_2.png)
 
 ### Video:
+https://user-images.githubusercontent.com/72087882/142737583-94afb1ee-d959-40f3-a3f9-6e7969c9c650.mp4
 
 
 ## Task 1.2
