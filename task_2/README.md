@@ -54,3 +54,4 @@ To record ROS messages enable recording via rosbag utility:
 roslaunch task_2 task2_1.launch record:="true" rec_name:="waypoint_mission.bag"
 ```
 ## Result
+https://user-images.githubusercontent.com/72087882/142737636-8195dc1c-8dc4-473a-9b19-a8226289157e.mp4
