@@ -78,3 +78,7 @@ Once the simulation window launches, you should see a drone in the gazebo enviro
 - Run your python script in a separate terminal to start sending the setpoints and navigate the drone.
 
 ## Result
+
+https://user-images.githubusercontent.com/72087882/144624247-956f7848-01a4-4b9b-912f-a3ed716017ef.mp4
+
+
