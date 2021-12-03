@@ -55,3 +55,26 @@ roslaunch task_2 task2_1.launch record:="true" rec_name:="waypoint_mission.bag"
 ```
 ## Result
 https://user-images.githubusercontent.com/72087882/142737636-8195dc1c-8dc4-473a-9b19-a8226289157e.mp4
+
+## Task 2.2
+
+## Problem Statement
+- You need to put the drone in Offboard mode and make a square of 10m x 10m.
+- Takeoff from the ground and give the first setpoint as 0m,0m,10m
+- Give the next setpoint as 10m,0m,10m followed by 10m,10m,10m followed by 0m,10m,10m and then back to 0m,0m,10m
+- Finally land at the home position and disarm
+Keep the velocity of drone 5 m/s
+
+## Resources
+Recommend to go through [PX4 Official Documentation](https://docs.px4.io/master/en/flight_modes/offboard.html), to get details about offboard mode.
+
+## Procedure
+- Complete the boiler plate script named offboard_control.py provided to you in the scripts folder
+- Launch the Gazebo world by typing the following command in a terminal
+```bash
+roslaunch task_2 task2_2.launch
+```
+Once the simulation window launches, you should see a drone in the gazebo environment.
+- Run your python script in a separate terminal to start sending the setpoints and navigate the drone.
+
+## Result

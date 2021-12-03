@@ -42,19 +42,31 @@ class offboard_control:
         except rospy.ServiceException as e:
             print ("Service arming call failed: %s"%e)
 
-        # Similarly delacre other service proxies 
+        # Similarly declare other service proxies 
 
+    def setDisarm(self):
+        # Calling to /mavros/cmd/arming to arm the drone and print fail message on failure
+        rospy.wait_for_service('mavros/cmd/arming')
+        try:
+            armService = rospy.ServiceProxy('mavros/cmd/arming', mavros_msgs.srv.CommandBool)
+            armService(False)
+        except rospy.ServiceException as e:
+            print ("Service disarming call failed: %s"%e)
    
     def offboard_set_mode(self):
-        pass
-
-        # Call /mavros/set_mode to set the mode the drone to OFFBOARD
-        # and print fail message on failure
-    
+        # Call /mavros/set_mode to set the mode the drone to OFFBOARD and print fail message on failure
+        rospy.wait_for_service('mavros/set_mode')
+        try:
+            flightModeService = rospy.ServiceProxy('mavros/set_mode', mavros_msgs.srv.SetMode)
+            flightModeService(custom_mode='OFFBOARD')
+        except rospy.ServiceException as e:
+            print ("service set_mode call failed: %s"%e)
    
 class stateMoniter:
     def __init__(self):
         self.state = State()
+        self.pos = PoseStamped()
+        self.vel = TwistStamped()
         # Instantiate a setpoints message
 
         
@@ -62,8 +74,10 @@ class stateMoniter:
         # Callback function for topic /mavros/state
         self.state = msg
 
-    # Create more callback functions for other subscribers    
-
+    # Create more callback functions for other subscribers
+    def posCb(self, msg):
+        # Callback function for topic /mavros/local_position/pose
+        self.pos = msg
 
 def main():
 
@@ -73,12 +87,13 @@ def main():
 
     # Initialize publishers
     local_pos_pub = rospy.Publisher('mavros/setpoint_position/local', PoseStamped, queue_size=10)
-    local_vel_pub = rospy.Publisher('mavros/setpoint_velocity/cmd_vel', Twist, queue_size=10)
+    local_vel_pub = rospy.Publisher('mavros/setpoint_velocity/cmd_vel', TwistStamped, queue_size=10)
     # Specify the rate 
     rate = rospy.Rate(20.0)
 
     # Make the list of setpoints 
-    setpoints = [] #List to setpoints
+    setpoints = [[0.0, 0.0, 10.0], [10.0, 0.0, 10.0], [10.0, 10.0, 10.0], [0.0, 10.0, 10.0], [0.0, 0.0, 10.0], [0.0, 0.0, 0.0]] #List to setpoints
+
 
     # Similarly initialize other publishers 
 
@@ -89,38 +104,39 @@ def main():
     pos.pose.position.z = 0
 
     # Set your velocity here
-    vel = Twist()
-    vel.linear.x = 0
-    vel.linear.y = 0
-    vel.linear.z = 0
+    vel = TwistStamped()
+    vel.twist.linear.x = 5
+    vel.twist.linear.y = 5
+    vel.twist.linear.z = 5
     
     # Similarly add other containers 
 
     # Initialize subscriber 
     rospy.Subscriber("/mavros/state",State, stateMt.stateCb)
 
-    # Similarly initialize other subscribers 
-
+    # Similarly initialize other subscribers  
+    rospy.Subscriber("/mavros/local_position/pose", PoseStamped, stateMt.posCb)
 
     '''
     NOTE: To set the mode as OFFBOARD in px4, it needs atleast 100 setpoints at rate > 10 hz, so before changing the mode to OFFBOARD, send some dummy setpoints  
     '''
-    for i in range(100):
+    
+    # Send some dummy setpoints before starting offboard mode
+    for _ in range(100):
         local_pos_pub.publish(pos)
         rate.sleep()
-
-
-    # Arming the drone
-    while not stateMt.state.armed:
-        ofb_ctl.setArm()
-        rate.sleep()
-    print("Armed!!")
 
     # Switching the state to auto mode
     while not stateMt.state.mode=="OFFBOARD":
         ofb_ctl.offboard_set_mode()
         rate.sleep()
     print ("OFFBOARD mode activated")
+
+    # Arming the drone
+    while not stateMt.state.armed:
+        ofb_ctl.setArm()
+        rate.sleep()
+    print("Armed!!")
 
     # Publish the setpoints 
     while not rospy.is_shutdown():
@@ -133,10 +149,22 @@ def main():
 
         Write your algorithm here 
         '''
-
-        local_pos_pub.publish(pos)
-        local_vel_pub.publish(vel)
-        rate.sleep()
+        for i in range(len(setpoints)):
+            pos.pose.position.x = setpoints[i][0]
+            pos.pose.position.y = setpoints[i][1]
+            pos.pose.position.z = setpoints[i][2]
+            while not (abs(stateMt.pos.pose.position.x - setpoints[i][0]) < 0.5 and abs(stateMt.pos.pose.position.y - setpoints[i][1]) < 0.5 and abs(stateMt.pos.pose.position.z - setpoints[i][2]) < 0.5):
+                local_pos_pub.publish(pos)
+                local_vel_pub.publish(vel)
+                rate.sleep()
+            print("Reached setpoint")
+        print("All setpoints reached")
+        #Disarm the drone
+        while stateMt.state.armed:
+            ofb_ctl.setDisarm()
+            rate.sleep()
+        print("Disarmed!!")
+        break     
 
 if __name__ == '__main__':
     try:
