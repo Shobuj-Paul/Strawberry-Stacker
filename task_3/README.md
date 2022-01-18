@@ -24,7 +24,11 @@
 ```bash
 roslaunch task_3 task3_1.launch
 ```
+- Set the following PX4 Parameters in the QGC GUI:
+    - COM_RCL_EXCEPT = 4
+    - COM_DISARM_LAND = -1
 - Once the simulation window launches, you should see a drone and a box in the gazebo environment.
-- Run your python script in a separate terminal to start sending the setpoints and navigate the drone.
+- Run your python script in a separate terminal to start sending the setpoints and navigate
+the drone.
 
 ## Result
