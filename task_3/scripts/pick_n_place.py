@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 '''
 This python file runs a ROS-node of name pick_n_place which controls the drone in offboard mode. 
@@ -200,4 +200,5 @@ def main():
         break
 
 if __name__=='__main__':
-    main()
+    try: main()
+    except rospy.ROSInterruptException: pass
