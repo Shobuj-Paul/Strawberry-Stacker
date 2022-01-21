@@ -62,4 +62,4 @@ roslaunch task_3 task3_2.launch
 - Run your python script in a separate terminal to start sending the setpoints and navigate the drone.
 
 ## Result
-
+https://user-images.githubusercontent.com/72087882/150508356-68e336da-b416-44c2-bdbe-0c2a952148fa.mp4
