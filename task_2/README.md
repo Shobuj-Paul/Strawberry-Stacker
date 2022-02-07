@@ -2,6 +2,11 @@
 
 ## Task 2.1
 
+## Overview
+- Getting started with px4 firmware
+- Learning about various modes
+- Sending Waypoints to px4 via mavros
+
 ## Problem Statement
 - You need to make the drone in Gazebo to follow 4 waypoints in the mission mode of px4
 - Create a rosnode named waypoint_Mission in a python script, which will set the waypoints to be sent to px4
@@ -36,23 +41,33 @@ chmod +x QGroundControl.AppImage
 ./QGroundControl.AppImage
 ```
 
+### Learning Resources
+- Highly recommended to go through [px4 official documentation](https://docs.px4.io/v1.12/en/development/development.html) (following till Modules & Commands will be enough for this task) and for mavros go through [mavros px4 documentation](https://docs.px4.io/master/en/ros/ros1.html) before proceeding with the actual task as the learning curve might be steep in the start.
+
+- This task will require the knowledge of _custom modes_, _custom messages_ and _mavros integration_
+
+## Problem Statement
+- You need to make the drone in Gazebo to follow 4 waypoints in the __mission__ mode of px4
+- Create a rosnode named ```waypoint_Mission``` in a python script, which will set the waypoints to be sent to px4
+- You need to call the _rosservice_ ```/mavros/cmd/arming``` to arm and ```/mavros/set_mode``` to set mode of the drone to __mission__ mode
+- Then you have to call the _rosservice_ ```/mavros/mission/push``` and ```/mavros/mission/pull``` to Request parameter from device (or internal cache) and send parameters from ROS to FCU respectively.
+- The waypoints are as follows
+    - Takeoff at the home position to 10 meters
+    - Go to 19.134641, 72.911706, 10
+    - Go to 19.134617, 72.911886, 10
+    - Go to 19.134434, 72.911817, 10
+    - Go to 19.134423, 72.911763, 10
+    - Land at the last coordinate
+
 ## Procedure
-- Complete the boiler plate script named waypoint_mission.py provided to you in the scripts folder
+- Complete the boiler plate script named _waypoint_mission.py_ provided to you in the scripts folder
 - Launch the Gazebo world by typing the following command in a terminal
 ```bash
 roslaunch task_2 task2_1.launch
 ```
 - Once the simulation window launches, you should see a drone in the gazebo environment.
 - Run your python script in a separate terminal to start sending the waypoints and navigate the drone.
-- As soon as you start the launch file, your python scripts should start running and the drone should arm, changes its mode to mission and then fly to the given coordinates and then land at the last coordinate.
-- You can either run your python scripts manually or you can add the rosnode in the *task2_1.launch* file by adding the following lines before the ```<group>``` tag
-```xml
-<node name="waypoint_mission" type="waypoint_mission.py" pkg="task_2" />
-```
-To record ROS messages enable recording via rosbag utility:
-```bash
-roslaunch task_2 task2_1.launch record:="true" rec_name:="waypoint_mission.bag"
-```
+
 ## Result
 https://user-images.githubusercontent.com/72087882/142737636-8195dc1c-8dc4-473a-9b19-a8226289157e.mp4
 

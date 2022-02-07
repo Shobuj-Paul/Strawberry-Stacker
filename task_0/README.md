@@ -1,5 +1,8 @@
 # Task 0: Installation and Setup
 
+### ROS Noetic Installation:
+Follow this ROSWiki link for full ROS Noetic installation: [ROS Noetic Installation on Ubuntu 20.04](http://wiki.ros.org/noetic/Installation/Ubuntu).
+
 ### General Dependencies:
 To use all provided utilities, there are some packages you need to install first. Copy and paste the following commands into your terminal:
 
@@ -39,9 +42,6 @@ pip3 install \
     --user packaging \
     --user jsonschema
 ```
-
-### ROS Noetic Installation:
-Follow this ROSWiki link for full ROS Noetic installation: [ROS Noetic Installation on Ubuntu 20.04](http://wiki.ros.org/noetic/Installation/Ubuntu)
 
 ### MAVROS Installation:
 MAVROS is a communication node based on MAVLink for ROS that is specially designed for communication between the drone and the companion computer. To install it, follow the following instructions:
@@ -102,6 +102,16 @@ git clone https://github.com/PX4/PX4-Autopilot.git --recursive
 cd PX4-Autopilot/
 make px4_sitl_default gazebo
 ```
+>Current versions of PX4 require an additional command to function properly. After cloning the PX4 repo and before building the workspace, cd into it
+>```bash
+>cd ~/catkin_ws/src/PX4-Autopilot
+>```
+>and then run
+>```bash
+>DONT_RUN=1 make px4_sitl_default gazebo
+>```
+>This command enables PX4 to configure itself for working with Gazebo.
+
 Now you should see a window pop out and a drone in the middle of the environment. After verifying, press Control-C in the command line to quit Gazebo and close the window.
 
 ### PX4 Enviroment:

@@ -2,6 +2,11 @@
 
 ## Task 1.1
 
+## Overview
+- Basic Image Processing techniques using OpenCV & Python
+- Generating and detecting an ArUco marker
+- Finding position and orientation of an ArUco marker.
+
 ## Problem Statement
 
 Write a Python script for detecting ArUco markers. The resulting image must have ArUco markers marked as shown in the end result. Hence the resulting image will have ArUco markers with:
@@ -19,7 +24,7 @@ Write a Python script for detecting ArUco markers. The resulting image must have
 
 Install OpenCV library for Python:
 ```bash
-sudo apt-get install opencv-contrib-python
+pip3 install opencv-contrib-python
 ```
 Note: If you already have opencv-python, remove it and install opencv-contrib-python as it can conflict with aruco library.
 
@@ -96,18 +101,22 @@ https://user-images.githubusercontent.com/72087882/142737583-94afb1ee-d959-40f3-
 
 ## Task 1.2
 
-## Problem Statement
-
-- Create a rosnode named marker_detection in a python script, which will detect a moving ArUco marker from the video feed of camera and will publish the id, position and orientation of the marker on a rostopic /marker_info
-
-- You need to subscribe to a rostopic named /camera/camera/image_raw to read camera the video frames from camera
-
-- Apply the ArUco detection on these frames and publish the results on the rostopic /marker_info in the message type task_1/Marker
+## Overview
+- Getting started with ROS
+- Subscribing video frames from a ROS topic
+- Publishing messages over a ROS topic
 
 ## Resources
+- Highly recommended to follow [ROS tutorials](http://wiki.ros.org/ROS/Tutorials) (following till 1.1.13 will be enough for this task) before proceeding with the actual task as the learning curve might be steep in the start.
+- This task will require the knowledge of _rosnodes_, _rostopic_, publisher & subscriber model
 
-- Going through ROS tutorials on ROS Wiki is enough to get started with ROS:
-[ROS Tutorials](https://wiki.ros.org/ROS/Tutorials)
+## Problem Statement
+
+- Create a _rosnode_ named _marker_detection_ in a python script, which will detect a moving ArUco marker from the video feed of camera and will publish the id, position and orientation of the marker on a _rostopic /marker_info_
+
+- You need to subscribe to a rostopic named _/camera/camera/image_raw_ to read camera the video frames from camera
+
+- Apply the ArUco detection on these frames and publish the results on the _rostopic /marker_info_ in the message type _task_1/Marker_
 
 ## Procedure
 
@@ -122,7 +131,7 @@ Once the simulation window launches, you should see a static camera in air poiti
 ```bash
 rosrun task_1 marker_detection.py
 ``` 
-Note: To avoid manually typing the rosrun command for every iteration, you can start the rosnode in the launch file itself, to do that add the following lines in the task_1.2.launch file in the launch folder. Make sure you add the line before the ```</launch>``` line.
+> Note: To avoid manually typing the rosrun command for every iteration, you can start the rosnode in the launch file itself, to do that add the following lines in the task_1.2.launch file in the launch folder. Make sure you add the line before the ```</launch>``` line.
 ```xml
 <node name="marker_detection" type="marker_detection.py" pkg="task_1" />
 ```
