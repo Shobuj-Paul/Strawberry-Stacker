@@ -48,3 +48,4 @@ The video/image solutions are also added in the README files.
 - [Task 3 - Pick and Place](task_3/README.md)
 - [Task 4 - Pick and Place Using Multiple Drones](task_4/README.md)
 - [Task 5 - Theme Implementation](task_5/README.md)
+- [Task 6 - Final Theme Implementation](task_6/README.md)

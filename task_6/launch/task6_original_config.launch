@@ -18,8 +18,8 @@
 
 	<group if="$(arg record)">
 		<node name="rosbag_record_multidrone" pkg="rosbag" type="record"
-		   args="record -O $(find task_5)/bag_files/$(arg rec_name) --duration=$(arg duration) --chunksize=10 /mavros/setpoint_position/local /mavros/local_position/pose /gazebo/model_states_throttle " output="screen"/>
+		   args="record -O $(find task_6)/bag_files/$(arg rec_name) --duration=$(arg duration) --chunksize=10 /mavros/setpoint_position/local /mavros/local_position/pose /gazebo/model_states_throttle " output="screen"/>
 
 	</group>
-	<node name="spawn_boxes" type="spawning_final.py" pkg="task_5"/>
+	<node name="spawn_boxes" type="spawning_final.py" pkg="task_6"/>
 </launch>
