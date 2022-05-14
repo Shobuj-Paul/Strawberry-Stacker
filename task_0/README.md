@@ -52,8 +52,8 @@ sudo apt install python3-catkin-tools python3-rosinstall-generator python3-osrf-
 
 **Step 1.** Create the workspace:
 ```bash
-mkdir -p ~/eyrc_ws/src
-cd ~/eyrc_ws
+mkdir -p ~/px4_ws/src
+cd ~/px4_ws
 catkin init
 wstool init src
 ```
@@ -97,7 +97,7 @@ source devel/setup.bash
 
 Clone the PX4 Repository:
 ```bash
-cd ~/eyrc_ws/src
+cd ~/px4_ws/src
 git clone https://github.com/PX4/PX4-Autopilot.git --recursive
 cd PX4-Autopilot/
 make px4_sitl_default gazebo
@@ -119,7 +119,7 @@ Now you should see a window pop out and a drone in the middle of the environment
 
 Build you workspace:
 ```bash
-cd ~/eyrc_ws
+cd ~/px4_ws
 catkin build
 ```
 Some extra tools to install:
@@ -130,8 +130,8 @@ pip3 install px4tools pymavlink
 
 Modifying your ‘bashrc’ so that your environment remains the same every time you open a new terminal:
 ```bash
-source ~/eyrc_ws/devel/setup.bash
-source ~/eyrc_ws/src/PX4-Autopilot/Tools/setup_gazebo.bash ~/eyrc_ws/src/PX4-Autopilot/ ~/eyrc_ws/src/PX4-Autopilot/build/px4_sitl_default
-export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:~/eyrc_ws/src/PX4-Autopilot
-export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:~/eyrc_ws/src/PX4-Autopilot/Tools/sitl_gazebo
+source ~/px4_ws/devel/setup.bash
+source ~/px4_ws/src/PX4-Autopilot/Tools/setup_gazebo.bash ~/px4_ws/src/PX4-Autopilot/ ~/px4_ws/src/PX4-Autopilot/build/px4_sitl_default
+export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:~/px4_ws/src/PX4-Autopilot
+export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:~/px4_ws/src/PX4-Autopilot/Tools/sitl_gazebo
 ```

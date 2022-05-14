@@ -30,7 +30,7 @@ For solving our problem statement we shall use PX4 Autopilot ecosystem for contr
 - Install ROS Noetic and set up PX4 as given in [Task 0 README](task_0/README.md)
 - Clone the repository in your workspace src folder.
     ```bash
-    cd eyrc_ws/src
+    cd px4_ws/src
     git clone https://github.com/Shobuj-Paul/Strawberry-Stacker.git
     ```
 - Build the package.
