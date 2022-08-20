@@ -43,6 +43,12 @@ pip3 install \
     --user jsonschema
 ```
 
+Remember to remove python 2.7 in case it is installed, otherwise cmake considers it as the default python interpreter.
+
+```bash
+sudo apt install python2 && sudo apt autoremove
+```
+
 ### MAVROS Installation:
 MAVROS is a communication node based on MAVLink for ROS that is specially designed for communication between the drone and the companion computer. To install it, follow the following instructions:
 
@@ -60,7 +66,7 @@ wstool init src
 
 **Step 2.** Install MAVLink: we use the Kinetic reference for all ROS distros as it’s not distro-specific and up to date
 ```bash
-rosinstall_generator --rosdistro kinetic mavlink | tee /tmp/mavros.rosinstall
+rosinstall_generator --rosdistro noetic mavlink | tee /tmp/mavros.rosinstall
 ```
 
 **Step 3.** Install MAVROS: get source (upstream - released)
@@ -104,7 +110,7 @@ make px4_sitl_default gazebo
 ```
 >Current versions of PX4 require an additional command to function properly. After cloning the PX4 repo and before building the workspace, cd into it
 >```bash
->cd ~/catkin_ws/src/PX4-Autopilot
+>cd ~/px4_ws/src/PX4-Autopilot
 >```
 >and then run
 >```bash
